@@ -69,5 +69,12 @@ namespace Event.Models
             }
             return userDeleted;
         }
+
+        public List<User> Types()
+        {
+            var _context = new EventContext();
+            var users = _context.User.ToList();
+            return users;
+        }
     }
 }

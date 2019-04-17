@@ -57,7 +57,7 @@ namespace Event.Models
             return LocationDeleted;
         }
 
-        public List<Location> GetAllLocations()
+        public List<Location> ListAllLocations()
         {
             var _context = new EventContext();
             var locations = _context.Location.ToList();

@@ -16,7 +16,7 @@ namespace Event.Models
 
         public virtual ICollection<Event> Event { get; set; }
 
-        public bool CreateType(string name, string eMail, string passWord, string role)
+        public bool CreateType(string name)
         {
             var typeCreated = false;
             var _context = new EventContext();

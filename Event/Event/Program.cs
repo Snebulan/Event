@@ -54,7 +54,7 @@ namespace Event
 
         }
 
-        private static void ShowEvents()
+        private static void ShowEventsMenu()
         {
             var events = new Models.Event();
             var location = new Location();
@@ -87,7 +87,7 @@ namespace Event
             StartMenu();
         }
 
-        private static void CreateEvent()
+        private static void CreateEventMenu()
         {
             var repeat = true;
             var eventNamn = "";
@@ -135,6 +135,12 @@ namespace Event
             }
             var eventToSave = new Models.Event();
             eventToSave.CreateEvent(eventNamn, startDate,endDate, city, typeOfEvent);
+            foreach (var item in eventToSave.ListAllEvents())
+            {
+                Console.WriteLine($"{item.Name}");
+            }
+            Console.WriteLine("\n");
+            AdminMenu();
         }
 
         private static void StartMenu()
@@ -146,7 +152,7 @@ namespace Event
             switch (selectedStartMenuAlternative)
             {
                 case 1:
-                    ShowEvents();
+                    ShowEventsMenu();
                     break;
                 case 2:
                     LogIn();
@@ -170,7 +176,7 @@ namespace Event
             switch (selectedStartMenuAlternative)
             {
                 case 1:
-                    CreateEvent();
+                    CreateEventMenu();
                     break;
                 case 2:
                     LogIn();

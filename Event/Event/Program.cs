@@ -8,7 +8,6 @@ namespace Event
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-
         }
     }
 }

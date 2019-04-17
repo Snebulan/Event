@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Event.Models
 {
@@ -49,6 +50,24 @@ namespace Event.Models
                 userCreated = false;
             }
             return userCreated;
+        }
+
+        public bool RemoveUser(int id)
+        {
+            var userDeleted = false;
+            var _context = new EventContext();
+            var user =  _context.User.Find(id);
+            _context.User.Remove(user);
+            var result = _context.SaveChanges();
+            if (result == 1)
+            {
+                userDeleted = true;
+            }
+            else
+            {
+                userDeleted = false;
+            }
+            return userDeleted;
         }
     }
 }

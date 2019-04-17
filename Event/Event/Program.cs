@@ -179,11 +179,26 @@ namespace Event
                     CreateEventMenu();
                     break;
                 case 2:
-                    LogIn();
+                    CancelEventMenu();
                     break;
                 default:
                     break;
             }
+
+        }
+
+        private static void CancelEventMenu()
+        {
+            var _context = new EventContext();
+            var Events = new Models.Event();
+            var activeEvents = Events.ListAllActiveEvents();
+            foreach (var item in activeEvents)
+            {
+                Console.WriteLine($"{item.Id}. {item.Name}");
+            }
+            var eventToSetUnActive = InputManager.InputInt("Välj event att avaktivera.");
+            Events.CancellEvent(eventToSetUnActive);
+
 
         }
 
@@ -193,6 +208,22 @@ namespace Event
             Console.WriteLine("1. Visa alla Event");
             Console.WriteLine("2. Visa mina Event");
             Console.WriteLine("3. Boka av Event");
+        }
+
+        private static void canceluser()
+        {
+            var _context = new EventContext();
+            var userId = _context.User.FirstOrDefault(c => c.Name == logedinUserName).Id;
+
+            var eventsId = _context.JoinEvent.ToList().Where(c => c.UserId == userId);
+            List<Models.Event> Events = new List<Models.Event>();
+            foreach (var item in eventsId)
+            {
+                Console.WriteLine(
+                    $"{_context.Event.FirstOrDefault(c => c.Id == item.EventId).Id}. " +
+                    $"{_context.Event.FirstOrDefault(c => c.Id == item.EventId).Name}");
+            }
+            var eventToCancelId = InputManager.InputInt("Vilket event vill du avboka?");
         }
     }
 }

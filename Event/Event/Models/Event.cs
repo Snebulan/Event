@@ -78,6 +78,13 @@ namespace Event.Models
             return events;
         }
 
+        public List<Event> ListAllActiveEvents()
+        {
+            var _context = new EventContext();
+            var events = _context.Event.Where(c => c.Active == true).ToList();
+            return events;
+        }
+
         public Event ShowEvent(int id)
         {
             var _context = new EventContext();

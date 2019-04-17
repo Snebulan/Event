@@ -70,7 +70,7 @@ namespace Event.Models
             return userDeleted;
         }
 
-        public List<User> Types()
+        public List<User> GetAllUsers()
         {
             var _context = new EventContext();
             var users = _context.User.ToList();

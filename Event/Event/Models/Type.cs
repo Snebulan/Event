@@ -57,7 +57,7 @@ namespace Event.Models
             return typeDeleted;
         }
 
-        public List<Type> Types()
+        public List<Type> GetAllTypes()
         {
             var _context = new EventContext();
             var types = _context.Type.ToList();

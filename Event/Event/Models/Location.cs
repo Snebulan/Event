@@ -63,5 +63,11 @@ namespace Event.Models
             var locations = _context.Location.ToList();
             return locations;
         }
+
+        public Location GetLocation(int Id)
+        {
+            var _context = new EventContext();
+            return _context.Location.FirstOrDefault(c => c.Id == Id);
+        }
     }
 }

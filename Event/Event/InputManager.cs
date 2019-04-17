@@ -7,7 +7,7 @@ namespace Event
     class InputManager
     {
 
-        private static string InputString(string prompt)
+        public static string InputString(string prompt)
         {
             string input = "";
             do
@@ -20,7 +20,7 @@ namespace Event
             return input;
         }
 
-        private static bool InputBool(string prompt)
+        public static bool InputBool(string prompt)
         {
             bool validBool = true;
             bool responseBool = false;
@@ -44,7 +44,7 @@ namespace Event
 
         }
 
-        private static int InputInt(string prompt)
+        public static int InputInt(string prompt)
         {
             bool validInt = false;
             int inputInt = 0;
@@ -56,7 +56,7 @@ namespace Event
             return inputInt;
         }
 
-        private static DateTime InputDate(string prompt)
+        public static DateTime InputDate(string prompt)
         {
             bool validDateTime = false;
             DateTime dateTime = new DateTime();

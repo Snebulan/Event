@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace Event
 {
     class Program
@@ -111,14 +112,34 @@ namespace Event
                 {
                     Console.WriteLine($"{item.Id}. {item.City}");
                 }
-                city = InputManager.InputInt("Välj ort för eventet.");
+                city = InputManager.InputInt("Välj ort för eventet eller 0 för att skapa ny.");
+                if (city == 0)
+                {
+                    var newLocationName = InputManager.InputString("Ange ortens namn: ");
+                    var newLocation = location.CreateLocation(newLocationName);
+
+                    var newLocationId = _context.Location.First(l => l.City == newLocationName);
+
+                    city = newLocationId.Id;
+
+                }
                 Console.WriteLine("\n");
                 Types = type.ListAllTypes();
                 foreach (var item in Types)
                 {
                     Console.WriteLine($"{item.Id}. {item.Name}");
                 }
-                typeOfEvent = InputManager.InputInt("Välj vilken typ av event.");
+                typeOfEvent = InputManager.InputInt("Välj vilken typ av event eller 0 för att skapa ny.");
+                if (typeOfEvent == 0)
+                {
+                    var newTypeName = InputManager.InputString("Ange typens namn: ");
+                    var newType = type.CreateType(newTypeName);
+
+                    var newTypeId = _context.Type.First(t => t.Name == newTypeName);
+
+                    typeOfEvent = newTypeId.Id;
+
+                }
                 Console.Clear();
 
                 Console.WriteLine(

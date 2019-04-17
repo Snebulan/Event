@@ -28,6 +28,7 @@ namespace Event.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+
                 optionsBuilder.UseSqlServer("Server=LAPTOP-T01K2IFS\\SQLEXPRESS;Database=Event;Trusted_Connection=True;");
             }
         }

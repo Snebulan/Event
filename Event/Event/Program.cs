@@ -11,18 +11,7 @@ namespace Event
         static void Main(string[] args)
         {
             StartMenu();
-            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
-            switch (selectedStartMenuAlternative)
-            {
-                case 1:
-                    ShowEvents();
-                    break;
-                case 2:
-                    LogIn();
-                    break;
-                default:
-                    break;
-            }
+
         }
 
         private static void LogIn()
@@ -43,7 +32,6 @@ namespace Event
                     Console.WriteLine("Felaktig inloggning, prova igen....");
                 }
             } while (!logedIn);
-
             Console.WriteLine(logedIn);
         }
 
@@ -51,24 +39,33 @@ namespace Event
         {
             var events = new Models.Event();
             var location = new Location();
-            Console.Clear();
-            Console.WriteLine("----- Alla Event-----");
-            foreach (var item in events.ListAllEvents())
+            var repeat = true;
+            while (repeat)
             {
-                Console.WriteLine($"{item.Id}. {item.Name}");
+                Console.Clear();
+                Console.WriteLine("----- Alla Event-----");
+                foreach (var item in events.ListAllEvents())
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}");
+                }
+                var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av!"));
+                var returnedEvent = events.ShowEvent(thisEvent);
+                var city = location.GetLocation(returnedEvent.LocationId);
+                DateTime startDate = returnedEvent.StartDate.Value;
+                DateTime endDate = returnedEvent.EndDate.Value;
+                Console.Clear();
+                Console.WriteLine(
+                    $"{returnedEvent.Name}\n" +
+                    $"Eventet startar: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Eventet slutar: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Eventet är i: {city.City}"
+                    );
+                Console.WriteLine("Vill du titta på ett event till? y/n");
+                if (Console.ReadLine() != "y")
+                    repeat = false;
             }
-            var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av!"));
-            var returnedEvent = events.ShowEvent(thisEvent);
-            var city = location.GetLocation(returnedEvent.LocationId);
-            DateTime startDate = returnedEvent.StartDate.Value;
-            DateTime endDate = returnedEvent.EndDate.Value;
             Console.Clear();
-            Console.WriteLine(
-                $"{returnedEvent.Name}\n" +
-                $"Eventet startar: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
-                $"Eventet slutar: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
-                $"Eventet är i: {city.City}"
-                );
+            StartMenu();
         }
 
         private static void StartMenu()
@@ -76,6 +73,18 @@ namespace Event
             Console.WriteLine("--- Start ---");
             Console.WriteLine("1. Visa Event");
             Console.WriteLine("2. Logga in");
+            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
+            switch (selectedStartMenuAlternative)
+            {
+                case 1:
+                    ShowEvents();
+                    break;
+                case 2:
+                    LogIn();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static void AdminMenu()

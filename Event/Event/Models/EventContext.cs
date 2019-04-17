@@ -28,7 +28,6 @@ namespace Event.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=LAPTOP-T01K2IFS\\SQLEXPRESS;Database=Event;Trusted_Connection=True;");
             }
         }

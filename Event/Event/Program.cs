@@ -89,34 +89,52 @@ namespace Event
 
         private static void CreateEvent()
         {
-            var location = new Location();
-            var type = new Models.Type();
-            var eventNamn = InputManager.InputString("Ange namn på Event.");
-            var startDate = InputManager.InputDate("Ange startdatum.");
-            var endDate = InputManager.InputDate("Ange slutdatum.");
-            Console.WriteLine("\n");
-            var locations = location.ListAllLocations();
-            foreach (var item in locations)
+            var repeat = true;
+            var eventNamn = "";
+            var _context = new EventContext();
+            DateTime startDate = new DateTime();
+            DateTime endDate = new DateTime();
+            List<Location> Locations = new List<Location>();
+            List<Models.Type> Types = new List<Models.Type>();
+            int city = 0;
+            int typeOfEvent = 0;
+            while (repeat)
             {
-                Console.WriteLine($"{item.Id}. {item.City}");
-            }
-            var city = InputManager.InputInt("Välj ort för eventet.");
-            Console.WriteLine("\n");
-            var types = type.ListAllTypes();
-            foreach (var item in types)
-            {
-                Console.WriteLine($"{item.Id}. {item.Name}");
-            }
-            var typeOfEvent = InputManager.InputInt("Välj vilken typ av event.");
-            Console.Clear();
+                var location = new Location();
+                var type = new Models.Type();
+                eventNamn = InputManager.InputString("Ange namn på Event.");
+                startDate = InputManager.InputDate("Ange startdatum.");
+                endDate = InputManager.InputDate("Ange slutdatum.");
+                Console.WriteLine("\n");
+                Locations = location.ListAllLocations();
+                foreach (var item in Locations)
+                {
+                    Console.WriteLine($"{item.Id}. {item.City}");
+                }
+                city = InputManager.InputInt("Välj ort för eventet.");
+                Console.WriteLine("\n");
+                Types = type.ListAllTypes();
+                foreach (var item in Types)
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}");
+                }
+                typeOfEvent = InputManager.InputInt("Välj vilken typ av event.");
+                Console.Clear();
 
-            Console.WriteLine(
-                $"Eventets namn: {eventNamn}\n" +
-                $"Start datum för Event: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
-                $"Slut datum för Event: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
-                $"Ort: {locations.FirstOrDefault(c => c.Id == city).City}\n" +
-                $"Typ: {types.FirstOrDefault(t => t.Id == typeOfEvent).Name}\n"       
-                );
+                Console.WriteLine(
+                    $"Eventets namn: {eventNamn}\n" +
+                    $"Start datum för Event: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Slut datum för Event: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Ort: {Locations.FirstOrDefault(c => c.Id == city).City}\n" +
+                    $"Typ: {Types.FirstOrDefault(t => t.Id == typeOfEvent).Name}\n"
+                    );
+
+                Console.WriteLine("Vill du skap eventet? y/n");
+                if (Console.ReadLine() == "y")
+                    repeat = false;
+            }
+            var eventToSave = new Models.Event();
+            eventToSave.CreateEvent(eventNamn, startDate,endDate, city, typeOfEvent);
         }
 
         private static void StartMenu()

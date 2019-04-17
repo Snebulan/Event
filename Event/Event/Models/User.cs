@@ -23,5 +23,32 @@ namespace Event.Models
         public virtual ICollection<Chatt> ChattSender { get; set; }
         public virtual ICollection<EventChatMessage> EventChatMessage { get; set; }
         public virtual ICollection<JoinEvent> JoinEvent { get; set; }
+
+
+        public bool CreateUser(string name, string eMail, string passWord, string role)
+        {
+            var userCreated = false;
+            var _context = new EventContext();
+            User user = new User
+            {
+                Name = name,
+                Passwd = passWord,
+                Mail = eMail,
+                Role = role
+            };
+
+            _context.User.Add(user);
+            var result = _context.SaveChanges();
+
+            if (result == 1)
+            {
+                userCreated = true;
+            }
+            else
+            {
+                userCreated = false;
+            }
+            return userCreated;
+        }
     }
 }

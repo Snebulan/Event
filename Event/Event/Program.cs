@@ -13,7 +13,6 @@ namespace Event
         static void Main(string[] args)
         {
             StartMenu();
-
         }
 
         private static void LogIn()
@@ -45,14 +44,11 @@ namespace Event
             if (userRole == "admin")
             {
                 AdminMenu();
-
             }
             else
             {
                 UserMenu();
             }
-
-
         }
 
         private static void ShowEventsMenu()
@@ -143,7 +139,6 @@ namespace Event
                     var newTypeId = _context.Type.First(x => x.Name == typeChosen);
 
                     typeOfEvent = newTypeId.Id;
-
                 }
                 else
                 {
@@ -226,7 +221,6 @@ namespace Event
             }
             var eventToSetUnActive = InputManager.InputInt("Välj event att avaktivera.");
             Events.CancellEvent(eventToSetUnActive);
-
 
         }
 

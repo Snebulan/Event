@@ -1,4 +1,5 @@
 ﻿using Event.Models;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -262,7 +263,25 @@ namespace Event
 
         private static void CreateUserMenu()
         {
-            
+            bool userExcists = false;
+            var _context = new EventContext();
+            do
+            {
+            Console.WriteLine("----- Skapa ny användare -----");
+            var newUserName = InputManager.InputString("Ange användarnamn: ");
+            List<string> UserNames = new List<string>();
+            UserNames = _context.User.Select(u => u.Name).ToList();
+                if (UserNames.Contains(newUserName))
+                {
+                    Console.WriteLine("Namnet är upptaget, välj ett annat namn!");
+                }
+                else
+                {
+                    userExcists = true;
+                }
+
+            } while (!userExcists);
+
         }
 
         private static void CancelEventMenu()

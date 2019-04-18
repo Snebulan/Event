@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 
 namespace Event
 {
@@ -255,6 +255,9 @@ namespace Event
                 case 5:
                     RemoveLocationMenu();
                     break;
+                case 6:
+                    RemoveTypeMenu();
+                    break;
                 case 7:
                     CreateUserMenu();
                     break;
@@ -270,10 +273,10 @@ namespace Event
             var _context = new EventContext();
             do
             {
-            Console.WriteLine("----- Skapa ny användare -----");
-            var newUserName = InputManager.InputString("Ange användarnamn: ");
-            List<string> UserNames = new List<string>();
-            UserNames = _context.User.Select(u => u.Name).ToList();
+                Console.WriteLine("----- Skapa ny användare -----");
+                var newUserName = InputManager.InputString("Ange användarnamn: ");
+                List<string> UserNames = new List<string>();
+                UserNames = _context.User.Select(u => u.Name).ToList();
                 if (UserNames.Contains(newUserName))
                 {
                     Console.WriteLine("Namnet är upptaget, välj ett annat namn!");
@@ -283,8 +286,8 @@ namespace Event
                     userExcists = true;
                 }
 
-            } while (!userExcists)
-            var 
+            } while (!userExcists);
+            
 
         }
 
@@ -333,29 +336,83 @@ namespace Event
             var _context = new EventContext();
             var locations = new Location();
             bool locationIsUsed = false;
+            var locationId = 0;
 
             do
             {
+                Console.WriteLine("----- Ta bort plats -----");
+                foreach (var location in locations.ListAllLocations())
+                {
+                    Console.WriteLine($"{location.Id}. {location.City}");
+                }
+                Console.WriteLine("------------------------------------");
+                locationId = InputManager.InputInt("Vilken plats vill du ta bort? (välj \"0\" för att avsluta)");
+                if (locationId == 0)
+                {
+                    Console.Clear();
+                    AdminMenu();
+                }
+                var events = _context.Event.Where(c => c.LocationId == locationId);
+
+                if (events.Any())
+                {
+                    Console.WriteLine("-----------------Varning!!!------------------");
+                    Console.WriteLine("Platsen du försöker ta bort används, välj ny!");
+                    Console.WriteLine("---------------------------------------------");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    locationIsUsed = true;
+                }
 
             } while (!locationIsUsed);
-            
-
-            foreach (var location in locations.ListAllLocations())
-            {
-                Console.WriteLine($"{location.Id}. {location.City}");
-            }
-            Console.WriteLine("------------------------------------");
-            var locationId = InputManager.InputInt("Vilken plats vill du ta bort?");
-
-            var events = _context.Event.Where(c => c.LocationId == locationId);
-
-            if (events.Any())
-            {
-                Console.WriteLine("Platsen du försöker ta bort används!");
-            }
 
             locations.RemoveLocation(locationId);
+            Console.Clear();
+            AdminMenu();
+        }
+        private static void RemoveTypeMenu()
+        {
+            Console.Clear();
+            var _context = new EventContext();
+            var types = new Models.Type();
+            bool typeIsUsed = false;
+            var typeId = 0;
 
+            do
+            {
+                Console.WriteLine("----- Ta bort typ -----");
+                foreach (var type in types.ListAllTypes())
+                {
+                    Console.WriteLine($"{type.Id}. {type.Name}");
+                }
+                Console.WriteLine("------------------------------------");
+                typeId = InputManager.InputInt("Vilken typ vill du ta bort? (välj \"0\" för att avsluta)");
+                if (typeId == 0)
+                {
+                    Console.Clear();
+                    AdminMenu();
+                }
+                var events = _context.Event.Where(c => c.TypeId == typeId);
+
+                if (events.Any())
+                {
+                    Console.WriteLine("-----------------Varning!!!------------------");
+                    Console.WriteLine("Typen du försöker ta bort används, välj ny!");
+                    Console.WriteLine("---------------------------------------------");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    typeIsUsed = true;
+                }
+
+            } while (!typeIsUsed);
+
+            types.RemoveType(typeId);
             Console.Clear();
             AdminMenu();
         }

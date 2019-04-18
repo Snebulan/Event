@@ -113,15 +113,19 @@ namespace Event
                     Console.WriteLine($"{item.Id}. {item.City}");
                 }
                 city = InputManager.InputInt("Välj ort för eventet eller 0 för att skapa ny.");
+                string locationChosen = "";
                 if (city == 0)
                 {
-                    var newLocationName = InputManager.InputString("Ange ortens namn: ");
-                    var newLocation = location.CreateLocation(newLocationName);
+                    locationChosen = InputManager.InputString("Ange ortens namn: ");
+                    var newLocation = location.CreateLocation(locationChosen);
 
-                    var newLocationId = _context.Location.First(l => l.City == newLocationName);
+                    var newLocationId = _context.Location.First(l => l.City == locationChosen);
 
                     city = newLocationId.Id;
-
+                }
+                else
+                {
+                    locationChosen = _context.Location.First(l => l.Id == city).City;
                 }
                 Console.WriteLine("\n");
                 Types = type.ListAllTypes();
@@ -130,32 +134,35 @@ namespace Event
                     Console.WriteLine($"{item.Id}. {item.Name}");
                 }
                 typeOfEvent = InputManager.InputInt("Välj vilken typ av event eller 0 för att skapa ny.");
+                string typeChosen = "";
                 if (typeOfEvent == 0)
                 {
-                    var newTypeName = InputManager.InputString("Ange typens namn: ");
-                    var newType = type.CreateType(newTypeName);
+                    typeChosen = InputManager.InputString("Ange typens namn: ");
+                    var newType = type.CreateType(typeChosen);
 
-                    var newTypeId = _context.Type.First(t => t.Name == newTypeName);
+                    var newTypeId = _context.Type.First(x => x.Name == typeChosen);
 
                     typeOfEvent = newTypeId.Id;
 
                 }
+                else
+                {
+                    typeChosen = _context.Type.First(l => l.Id == typeOfEvent).Name;
+                }
                 Console.Clear();
 
-                Console.WriteLine(
-                    $"Eventets namn: {eventNamn}\n" +
+                Console.WriteLine($"Eventets namn: {eventNamn}\n" +
                     $"Start datum för Event: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
                     $"Slut datum för Event: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
-                    $"Ort: {Locations.FirstOrDefault(c => c.Id == city).City}\n" +
-                    $"Typ: {Types.FirstOrDefault(t => t.Id == typeOfEvent).Name}\n"
-                    );
+                    $"Ort: {locationChosen}\n" +
+                    $"Typ: {typeChosen}\n");
 
-                Console.WriteLine("Vill du skap eventet? y/n");
+                Console.WriteLine("Vill du skapa eventet? y/n");
                 if (Console.ReadLine() == "y")
                     repeat = false;
             }
             var eventToSave = new Models.Event();
-            eventToSave.CreateEvent(eventNamn, startDate,endDate, city, typeOfEvent);
+            var eventCreated = eventToSave.CreateEvent(eventNamn, startDate,endDate, city, typeOfEvent);
             foreach (var item in eventToSave.ListAllEvents())
             {
                 Console.WriteLine($"{item.Name}");

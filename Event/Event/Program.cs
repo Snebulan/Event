@@ -280,7 +280,8 @@ namespace Event
                     userExcists = true;
                 }
 
-            } while (!userExcists);
+            } while (!userExcists)
+            var 
 
         }
 

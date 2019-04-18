@@ -251,6 +251,9 @@ namespace Event
                 case 4:
                     ShowEventsMenu(0);
                     break;
+                case 5:
+                    RemoveLocationMenu();
+                    break;
                 case 7:
                     CreateUserMenu();
                     break;
@@ -302,6 +305,39 @@ namespace Event
                     $"{_context.Event.FirstOrDefault(c => c.Id == item.EventId).Name}");
             }
             var eventToCancelId = InputManager.InputInt("Vilket event vill du avboka?");
+        }
+
+        private static void RemoveLocationMenu()
+        {
+            Console.Clear();
+            var _context = new EventContext();
+            var locations = new Location();
+            bool locationIsUsed = false;
+
+            do
+            {
+
+            } while (!locationIsUsed);
+            
+
+            foreach (var location in locations.ListAllLocations())
+            {
+                Console.WriteLine($"{location.Id}. {location.City}");
+            }
+            Console.WriteLine("------------------------------------");
+            var locationId = InputManager.InputInt("Vilken plats vill du ta bort?");
+
+            var events = _context.Event.Where(c => c.LocationId == locationId);
+
+            if (events.Any())
+            {
+                Console.WriteLine("Platsen du försöker ta bort används!");
+            }
+
+            locations.RemoveLocation(locationId);
+
+            Console.Clear();
+            AdminMenu();
         }
     }
 }

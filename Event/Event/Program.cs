@@ -269,26 +269,47 @@ namespace Event
 
         private static void CreateUserMenu()
         {
-            bool userExcists = false;
-            var _context = new EventContext();
-            do
+            bool repeat = true;
+            User newUser = new User();
+            while (repeat)
             {
-                Console.WriteLine("----- Skapa ny användare -----");
-                var newUserName = InputManager.InputString("Ange användarnamn: ");
-                List<string> UserNames = new List<string>();
-                UserNames = _context.User.Select(u => u.Name).ToList();
-                if (UserNames.Contains(newUserName))
+                bool userExcists = false;
+                var newUserName = "";
+                
+                var _context = new EventContext();
+                do
                 {
-                    Console.WriteLine("Namnet är upptaget, välj ett annat namn!");
-                }
-                else
-                {
-                    userExcists = true;
-                }
+                    Console.WriteLine("----- Skapa ny användare -----");
+                    newUserName = InputManager.InputString("Ange användarnamn: ");
+                    List<string> UserNames = new List<string>();
+                    UserNames = _context.User.Select(u => u.Name).ToList();
+                    if (UserNames.Contains(newUserName))
+                    {
+                        Console.WriteLine("Namnet är upptaget, välj ett annat namn!");
+                    }
+                    else
+                    {
+                        userExcists = true;
+                    }
 
-            } while (!userExcists);
-            
+                } while (!userExcists);
+                newUser.Name = newUserName;
+                newUser.Passwd = InputManager.InputString("Ange lösenord: ");
+                newUser.Mail = InputManager.InputString("Ange mail: ");
+                newUser.Role = InputManager.InputString("Ange vilken roll användaren har: admin alt user");
 
+
+                    Console.WriteLine($"Användarens namn: {newUser.Name}\n" +
+                        $"Lösenord: {newUser.Passwd}\n" +
+                        $"Mail: {newUser.Mail}\n" +
+                        $"Roll: {newUser.Role}\n");
+                Console.WriteLine("Vill du skapa användaren? y/n");
+                    if (Console.ReadLine() == "y")
+                            repeat = false;
+            }
+            var createTheNewUser = new User();
+            createTheNewUser.CreateUser(newUser);
+            RouteUser();
         }
 
         private static void CancelEventMenu()

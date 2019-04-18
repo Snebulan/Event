@@ -26,17 +26,11 @@ namespace Event.Models
         public virtual ICollection<JoinEvent> JoinEvent { get; set; }
 
 
-        public bool CreateUser(string name, string eMail, string passWord, string role)
+        public bool CreateUser(User newUser)
         {
             var userCreated = false;
             var _context = new EventContext();
-            User user = new User
-            {
-                Name = name,
-                Passwd = passWord,
-                Mail = eMail,
-                Role = role
-            };
+            User user = newUser;
 
             _context.User.Add(user);
             var result = _context.SaveChanges();

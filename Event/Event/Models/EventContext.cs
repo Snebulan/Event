@@ -29,7 +29,7 @@ namespace Event.Models
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=LAPTOP-2DUMD1UF\\SQLEXPRESS;Database=Event;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Event;Trusted_Connection=True;");
             }
         }
 

@@ -8,8 +8,10 @@ namespace Event
 {
     class Program
     {
-        private static  bool logedIn = false;
+        private static bool logedIn = false;
         private static string logedinUserName = "";
+        private static User logedInUser;
+
         static void Main(string[] args)
         {
             StartMenu();
@@ -31,6 +33,7 @@ namespace Event
                     {
                         logedIn = true;
                         logedinUserName = userName;
+                        logedInUser = thisUser;
                         userRole = thisUser.Role;
                     }
                 }
@@ -55,7 +58,7 @@ namespace Event
 
         }
 
-        private static void ShowEventsMenu()
+        private static void ShowEventsMenu(int typeOfEventList)
         {
             var events = new Models.Event();
             var location = new Location();
@@ -64,10 +67,21 @@ namespace Event
             {
                 Console.Clear();
                 Console.WriteLine("----- Alla Event-----");
-                foreach (var item in events.ListAllEvents())
+                if (typeOfEventList == 0)
                 {
-                    Console.WriteLine($"{item.Id}. {item.Name}");
+                    foreach (var item in events.ListAllEvents())
+                    {
+                        Console.WriteLine($"{item.Id}. {item.Name}");
+                    }
                 }
+                else if (typeOfEventList == 1)
+                {
+                    foreach (var item in events.ListAllActiveEvents())
+                    {
+                        Console.WriteLine($"{item.Id}. {item.Name}");
+                    }
+                }
+
                 var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av!"));
                 var returnedEvent = events.ShowEvent(thisEvent);
                 var city = location.GetLocation(returnedEvent.LocationId);
@@ -85,7 +99,28 @@ namespace Event
                     repeat = false;
             }
             Console.Clear();
-            StartMenu();
+            RouteUser();
+        }
+
+        private static void RouteUser()
+        {
+            if (logedInUser == null)
+            {
+                StartMenu();
+            }
+            var userRole = logedInUser.Role;
+            switch (userRole)
+            {
+                case "admin":
+                    AdminMenu();
+                    break;
+                case "user":
+                    UserMenu();
+                    break;
+                default:
+                    
+                    break;
+            }
         }
 
         private static void CreateEventMenu()
@@ -180,7 +215,7 @@ namespace Event
             switch (selectedStartMenuAlternative)
             {
                 case 1:
-                    ShowEventsMenu();
+                    ShowEventsMenu(1);
                     break;
                 case 2:
                     LogIn();
@@ -195,11 +230,12 @@ namespace Event
             Console.WriteLine("--- Admin Menu ---");
             Console.WriteLine("1. Skapa Event");
             Console.WriteLine("2. Avboka Event");
-            Console.WriteLine("3. Visa alla Event");
-            Console.WriteLine("4. Ta bort Ort");
-            Console.WriteLine("5. Ta bort Typ");
-            Console.WriteLine("6. Lägg till användare");
-            Console.WriteLine("7. Ta bort användare");
+            Console.WriteLine("3. Visa alla aktiva Event");
+            Console.WriteLine("4. Visa alla Event");
+            Console.WriteLine("5. Ta bort Ort");
+            Console.WriteLine("6. Ta bort Typ");
+            Console.WriteLine("7. Lägg till användare");
+            Console.WriteLine("8. Ta bort användare");
             int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
             switch (selectedStartMenuAlternative)
             {
@@ -209,10 +245,24 @@ namespace Event
                 case 2:
                     CancelEventMenu();
                     break;
+                case 3:
+                    ShowEventsMenu(1);
+                    break;
+                case 4:
+                    ShowEventsMenu(0);
+                    break;
+                case 7:
+                    CreateUserMenu();
+                    break;
                 default:
                     break;
             }
 
+        }
+
+        private static void CreateUserMenu()
+        {
+            
         }
 
         private static void CancelEventMenu()
@@ -226,7 +276,7 @@ namespace Event
             }
             var eventToSetUnActive = InputManager.InputInt("Välj event att avaktivera.");
             Events.CancellEvent(eventToSetUnActive);
-
+            AdminMenu();
 
         }
 

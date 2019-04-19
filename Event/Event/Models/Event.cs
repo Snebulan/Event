@@ -91,5 +91,18 @@ namespace Event.Models
             var requestedEvent = _context.Event.FirstOrDefault(e => e.Id == id);
             return requestedEvent;
         }
+
+        public List<Event> ShowAllEventsForUser (int Id)
+        {
+            var _context = new EventContext();
+            List<JoinEvent> JoinEvents = _context.JoinEvent.Where(j => j.UserId == Id).ToList();
+            List<Models.Event> EventsForUser = new List<Models.Event>();
+
+            foreach (var item in JoinEvents)
+            {
+                EventsForUser.Add(_context.Event.FirstOrDefault(e => e.Id == item.Id));
+            }
+            return EventsForUser;
+        }
     }
 }

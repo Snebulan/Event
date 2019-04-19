@@ -119,7 +119,7 @@ namespace Event
                     UserMenu();
                     break;
                 default:
-                    
+
                     break;
             }
         }
@@ -198,7 +198,7 @@ namespace Event
                     repeat = false;
             }
             var eventToSave = new Models.Event();
-            var eventCreated = eventToSave.CreateEvent(eventNamn, startDate,endDate, city, typeOfEvent);
+            var eventCreated = eventToSave.CreateEvent(eventNamn, startDate, endDate, city, typeOfEvent);
             foreach (var item in eventToSave.ListAllEvents())
             {
                 Console.WriteLine($"{item.Name}");
@@ -261,10 +261,57 @@ namespace Event
                 case 7:
                     CreateUserMenu();
                     break;
+                case 8:
+                    RemoveUserMenu();
+                    break;
                 default:
                     break;
             }
 
+        }
+
+        private static void RemoveUserMenu()
+        {
+            var _context = new EventContext();
+            var users = _context.User.ToList();
+            var userToRemove = new User();
+            bool repeat = true;
+            bool dontRemove = true;
+
+            while (dontRemove)
+            {
+                foreach (var item in users)
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}");
+                }
+                while (repeat)
+                {
+                    var userIdToRemove = InputManager.InputInt("Välj användare att ta bort, eller tryck 0 för att avbryta");
+
+                    if (userIdToRemove == 0)
+                    {
+                        Console.Clear();
+                        RouteUser();
+                    }
+                    userToRemove = _context.User.FirstOrDefault(u => u.Id == userIdToRemove);
+                    if (userToRemove.Name == logedInUser.Name)
+                    {
+                        Console.WriteLine("Du kan inte ta bort den användare du är inloggad med! Välj annan användare att ta bort!");
+                    }
+                    else
+                    {
+                        repeat = false;
+                    }
+                }
+                Console.WriteLine($"Är du säker på att du vill ta bort {userToRemove.Name}?");
+
+                Console.WriteLine("Vill du skapa eventet? y/n");
+                if (Console.ReadLine() == "y")
+                    dontRemove = false;
+            }
+            _context.User.Remove(userToRemove);
+            _context.SaveChanges();
+            RouteUser();
         }
 
         private static void CreateUserMenu()
@@ -275,7 +322,7 @@ namespace Event
             {
                 bool userExcists = false;
                 var newUserName = "";
-                
+
                 var _context = new EventContext();
                 do
                 {
@@ -299,13 +346,13 @@ namespace Event
                 newUser.Role = InputManager.InputString("Ange vilken roll användaren har: admin alt user");
 
 
-                    Console.WriteLine($"Användarens namn: {newUser.Name}\n" +
-                        $"Lösenord: {newUser.Passwd}\n" +
-                        $"Mail: {newUser.Mail}\n" +
-                        $"Roll: {newUser.Role}\n");
+                Console.WriteLine($"Användarens namn: {newUser.Name}\n" +
+                    $"Lösenord: {newUser.Passwd}\n" +
+                    $"Mail: {newUser.Mail}\n" +
+                    $"Roll: {newUser.Role}\n");
                 Console.WriteLine("Vill du skapa användaren? y/n");
-                    if (Console.ReadLine() == "y")
-                            repeat = false;
+                if (Console.ReadLine() == "y")
+                    repeat = false;
             }
             var createTheNewUser = new User();
             createTheNewUser.CreateUser(newUser);
@@ -332,7 +379,59 @@ namespace Event
             Console.WriteLine("--- Användare Menu ---");
             Console.WriteLine("1. Visa alla Event");
             Console.WriteLine("2. Visa mina Event");
-            Console.WriteLine("3. Boka av Event");
+            Console.WriteLine("3. Boka Event");
+            Console.WriteLine("4. Boka av Event");
+            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
+            switch (selectedStartMenuAlternative)
+            {
+                case 1:
+                    ShowEventsMenu(1);
+                    break;
+                case 2:
+                    ShowAllEventsForUserMenu();
+                    break;
+                case 3:
+                    JoinEventMenu();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private static void JoinEventMenu()
+        {
+            var newEvents = new Models.Event();
+            
+            foreach (var item in newEvents.ListAllActiveEvents())
+            {
+                Console.WriteLine($"{item.Id}. {item.Name}");
+            }
+        }
+
+        private static void ShowAllEventsForUserMenu()
+        {
+            var userEvents = new Models.Event();
+            var eventsForUser = userEvents.ShowAllEventsForUser(logedInUser.Id);
+            if (!eventsForUser.Any())
+            {
+                Console.WriteLine("Du är inte anmäld till några Event!");
+                Thread.Sleep(3000);
+                Console.Clear();
+                RouteUser();
+            }
+            else
+            {
+                foreach (var item in eventsForUser)
+                {
+                    Console.WriteLine($"{item.Name}");
+                }
+                var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av, tryck 0 för att avbryta!"));
+                if (thisEvent == 0)
+                {
+                    RouteUser();
+                }
+            }
+
         }
 
         private static void canceluser()

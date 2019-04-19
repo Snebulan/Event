@@ -470,7 +470,7 @@ namespace Event
                 if (locationId == 0)
                 {
                     Console.Clear();
-                    AdminMenu();
+                    RouteUser();
                 }
                 var events = _context.Event.Where(c => c.LocationId == locationId);
 
@@ -491,7 +491,7 @@ namespace Event
 
             locations.RemoveLocation(locationId);
             Console.Clear();
-            AdminMenu();
+            RouteUser();
         }
         private static void RemoveTypeMenu()
         {
@@ -513,7 +513,7 @@ namespace Event
                 if (typeId == 0)
                 {
                     Console.Clear();
-                    AdminMenu();
+                    RouteUser();
                 }
                 var events = _context.Event.Where(c => c.TypeId == typeId);
 
@@ -534,7 +534,7 @@ namespace Event
 
             types.RemoveType(typeId);
             Console.Clear();
-            AdminMenu();
+            RouteUser();
         }
     }
 }

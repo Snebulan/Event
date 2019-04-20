@@ -70,10 +70,5 @@ namespace Event.Models
             var users = _context.User.ToList();
             return users;
         }
-
-        public static implicit operator User(int v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

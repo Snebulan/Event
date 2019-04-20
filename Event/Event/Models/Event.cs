@@ -6,6 +6,7 @@ namespace Event.Models
 {
     public partial class Event
     {
+
         public Event()
         {
             EventChatt = new HashSet<EventChatt>();
@@ -25,17 +26,22 @@ namespace Event.Models
         public virtual ICollection<EventChatt> EventChatt { get; set; }
         public virtual ICollection<JoinEvent> JoinEvent { get; set; }
 
-        public bool CreateEvent(string name, DateTime startDate, DateTime endDate, int locationId, int typeId)
+        /// <summary>
+        /// ads event to db
+        /// </summary>
+        /// <param name="newEvent"></param>
+        /// <returns></returns>
+        public bool CreateEvent(Event newEvent)
         {
             var eventCreated = false;
             var _context = new EventContext();
-            Event newEvent = new Event
+            newEvent = new Event
             {
-                Name = name,
-                StartDate = startDate,
-                EndDate = endDate,
-                LocationId = locationId,
-                TypeId = typeId,
+                Name = newEvent.Name,
+                StartDate = newEvent.StartDate,
+                EndDate = newEvent.EndDate,
+                LocationId = newEvent.LocationId,
+                TypeId = newEvent.TypeId,
                 Active = true
             };
 
@@ -53,6 +59,11 @@ namespace Event.Models
             return eventCreated;
         }
 
+        /// <summary>
+        /// sets event state to not active
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool CancellEvent(int id)
         {
             var cancelledEvent = false;
@@ -71,6 +82,10 @@ namespace Event.Models
             return cancelledEvent;
         }
 
+        /// <summary>
+        /// Gets all events from db
+        /// </summary>
+        /// <returns>List<event></returns>
         public List<Event> ListAllEvents()
         {
             var _context = new EventContext();
@@ -78,6 +93,10 @@ namespace Event.Models
             return events;
         }
 
+        /// <summary>
+        /// Gets all active events
+        /// </summary>
+        /// <returns>List<event></returns>
         public List<Event> ListAllActiveEvents()
         {
             var _context = new EventContext();
@@ -85,6 +104,11 @@ namespace Event.Models
             return events;
         }
 
+        /// <summary>
+        /// Gets a certain event
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Event</returns>
         public Event ShowEvent(int id)
         {
             var _context = new EventContext();
@@ -92,6 +116,11 @@ namespace Event.Models
             return requestedEvent;
         }
 
+        /// <summary>
+        /// Returns all event that user is signed up for
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returnsList<Event>></returns>
         public List<Event> ShowAllEventsForUser (int Id)
         {
             var _context = new EventContext();

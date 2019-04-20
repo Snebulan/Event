@@ -18,7 +18,9 @@ namespace Event
             StartMenu();
 
         }
-
+        /// <summary>
+        /// Logs in user and sets logeInUser
+        /// </summary>
         private static void LogIn()
         {
             var userRole = "";
@@ -61,6 +63,10 @@ namespace Event
 
         }
 
+        /// <summary>
+        /// Shows all events or all active events depending of typeOfEventList
+        /// </summary>
+        /// <param name="typeOfEventList">If 0 shows all events, if 1 shows all active events</param>
         private static void ShowEventsMenu(int typeOfEventList)
         {
             var events = new Models.Event();
@@ -105,6 +111,9 @@ namespace Event
             RouteUser();
         }
 
+        /// <summary>
+        /// Checks privilegies for user and routes them to the correct menu
+        /// </summary>
         private static void RouteUser()
         {
             if (logedInUser == null)
@@ -126,10 +135,14 @@ namespace Event
             }
         }
 
+        /// <summary>
+        /// Creates event
+        /// </summary>
         private static void CreateEventMenu()
         {
             var repeat = true;
             var eventNamn = "";
+            var newEvent = new Models.Event();
             var _context = new EventContext();
             DateTime startDate = new DateTime();
             DateTime endDate = new DateTime();
@@ -141,11 +154,12 @@ namespace Event
             {
                 var location = new Location();
                 var type = new Models.Type();
+
                 Console.Clear();
                 Console.WriteLine("------ Skapa Event ------");
-                eventNamn = InputManager.InputString("Ange namn på Event.");
-                startDate = InputManager.InputDate("Ange startdatum.");
-                endDate = InputManager.InputDate("Ange slutdatum.");
+                newEvent.Name = InputManager.InputString("Ange namn på Event.");
+                newEvent.StartDate = InputManager.InputDate("Ange startdatum.");
+                newEvent.EndDate = InputManager.InputDate("Ange slutdatum.");
                 Console.WriteLine("\n");
                 Console.WriteLine("----- Sparade orter -----");
                 Locations = location.ListAllLocations();
@@ -203,8 +217,10 @@ namespace Event
                 if (Console.ReadLine() == "y")
                     repeat = false;
             }
+            newEvent.LocationId = city;
+            newEvent.TypeId = typeOfEvent;
             var eventToSave = new Models.Event();
-            var eventCreated = eventToSave.CreateEvent(eventNamn, startDate, endDate, city, typeOfEvent);
+            var eventCreated = eventToSave.CreateEvent(newEvent);
             Console.Clear();
             Console.WriteLine("----- Sparade Event -----");
             foreach (var item in eventToSave.ListAllEvents())
@@ -220,6 +236,9 @@ namespace Event
             AdminMenu();
         }
 
+        /// <summary>
+        /// shows th initial menu
+        /// </summary>
         private static void StartMenu()
         {
             Console.WriteLine("--- Event Application ---");
@@ -240,6 +259,9 @@ namespace Event
             }
         }
 
+        /// <summary>
+        /// shows admin menu
+        /// </summary>
         private static void AdminMenu()
         {
             Console.WriteLine("------ Admin Meny -------");
@@ -285,6 +307,39 @@ namespace Event
 
         }
 
+        /// <summary>
+        /// shows user menu
+        /// </summary>
+        private static void UserMenu()
+        {
+            Console.WriteLine("--- Användare Menu ---");
+            Console.WriteLine("1. Visa alla Event");
+            Console.WriteLine("2. Visa mina Event");
+            Console.WriteLine("3. Boka Event");
+            Console.WriteLine("4. Boka av Event");
+            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
+            switch (selectedStartMenuAlternative)
+            {
+                case 1:
+                    ShowEventsMenu(1);
+                    break;
+                case 2:
+                    ShowAllEventsForUserMenu();
+                    break;
+                case 3:
+                    JoinEventMenu();
+                    break;
+                case 4:
+                    CancelEventForUserMenu();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// removes user from db
+        /// </summary>
         private static void RemoveUserMenu()
         {
             var _context = new EventContext();
@@ -329,6 +384,9 @@ namespace Event
             RouteUser();
         }
 
+        /// <summary>
+        /// ads user to db
+        /// </summary>
         private static void CreateUserMenu()
         {
             bool repeat = true;
@@ -374,6 +432,9 @@ namespace Event
             RouteUser();
         }
 
+        /// <summary>
+        /// sets state of event to not active
+        /// </summary>
         private static void CancelEventMenu()
         {
             var _context = new EventContext();
@@ -389,33 +450,9 @@ namespace Event
 
         }
 
-        private static void UserMenu()
-        {
-            Console.WriteLine("--- Användare Menu ---");
-            Console.WriteLine("1. Visa alla Event");
-            Console.WriteLine("2. Visa mina Event");
-            Console.WriteLine("3. Boka Event");
-            Console.WriteLine("4. Boka av Event");
-            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
-            switch (selectedStartMenuAlternative)
-            {
-                case 1:
-                    ShowEventsMenu(1);
-                    break;
-                case 2:
-                    ShowAllEventsForUserMenu();
-                    break;
-                case 3:
-                    JoinEventMenu();
-                    break;
-                case 4:
-                    CancelEventForUserMenu();
-                    break;
-                default:
-                    break;
-            }
-        }
-
+        /// <summary>
+        /// cancels event for user
+        /// </summary>
         private static void CancelEventForUserMenu()
         {
             var thisEvent = new Models.Event();
@@ -464,6 +501,9 @@ namespace Event
         }
         }
 
+        /// <summary>
+        /// signs up user to event
+        /// </summary>
         private static void JoinEventMenu()
         {
             var _context = new EventContext();
@@ -497,6 +537,10 @@ namespace Event
             joinEvent.SignUp(logedInUser, thisEvent);
             RouteUser();
         }
+
+        /// <summary>
+        /// shows all events that user is signup for
+        /// </summary>
         private static void ShowAllEventsForUserMenu()
         {
             var userEvents = new Models.Event();
@@ -543,6 +587,10 @@ namespace Event
             }
 
         }
+
+        /// <summary>
+        /// removes location from db
+        /// </summary>
         private static void RemoveLocationMenu()
         {
             Console.Clear();
@@ -586,6 +634,10 @@ namespace Event
             Console.Clear();
             RouteUser();
         }
+
+        /// <summary>
+        /// removes type
+        /// </summary>
         private static void RemoveTypeMenu()
         {
             Console.Clear();

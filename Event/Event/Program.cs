@@ -24,9 +24,11 @@ namespace Event
             var userRole = "";
             do
             {
+                Console.Clear();
                 var _context = new EventContext();
-                var userName = InputManager.InputString("Ange användarnamn.");
-                var passWord = InputManager.InputString("Ange lösenord.");
+                Console.WriteLine("------- Logga in --------");
+                var userName = InputManager.InputString("Ange användarnamn: ");
+                var passWord = InputManager.InputString("Ange lösenord: ");
                 if (_context.User.Any(c => c.Name == userName))
                 {
                     var thisUser = _context.User.FirstOrDefault(u => u.Name == userName);
@@ -139,15 +141,19 @@ namespace Event
             {
                 var location = new Location();
                 var type = new Models.Type();
+                Console.Clear();
+                Console.WriteLine("------ Skapa Event ------");
                 eventNamn = InputManager.InputString("Ange namn på Event.");
                 startDate = InputManager.InputDate("Ange startdatum.");
                 endDate = InputManager.InputDate("Ange slutdatum.");
                 Console.WriteLine("\n");
+                Console.WriteLine("----- Sparade orter -----");
                 Locations = location.ListAllLocations();
                 foreach (var item in Locations)
                 {
                     Console.WriteLine($"{item.Id}. {item.City}");
                 }
+                Console.WriteLine("-------------------------");
                 city = InputManager.InputInt("Välj ort för eventet eller 0 för att skapa ny.");
                 string locationChosen = "";
                 if (city == 0)
@@ -199,20 +205,28 @@ namespace Event
             }
             var eventToSave = new Models.Event();
             var eventCreated = eventToSave.CreateEvent(eventNamn, startDate, endDate, city, typeOfEvent);
+            Console.Clear();
+            Console.WriteLine("----- Sparade Event -----");
             foreach (var item in eventToSave.ListAllEvents())
             {
                 Console.WriteLine($"{item.Name}");
             }
             Console.WriteLine("\n");
+            Console.WriteLine("-------------------OBS!!---------------------");
+            Console.WriteLine("----Du återvänder straxt till Admin menyn ---");
+            Console.WriteLine("---------------------------------------------");
+            Thread.Sleep(4000);
+            Console.Clear();
             AdminMenu();
         }
 
         private static void StartMenu()
         {
-            Console.WriteLine("--- Start ---");
+            Console.WriteLine("--- Event Application ---");
             Console.WriteLine("1. Visa Event");
             Console.WriteLine("2. Logga in");
-            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
+            Console.WriteLine("-------------------------");
+            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ:");
             switch (selectedStartMenuAlternative)
             {
                 case 1:
@@ -228,7 +242,7 @@ namespace Event
 
         private static void AdminMenu()
         {
-            Console.WriteLine("--- Admin Menu ---");
+            Console.WriteLine("------ Admin Meny -------");
             Console.WriteLine("1. Skapa Event");
             Console.WriteLine("2. Avboka Event");
             Console.WriteLine("3. Visa alla aktiva Event");
@@ -237,7 +251,8 @@ namespace Event
             Console.WriteLine("6. Ta bort Typ");
             Console.WriteLine("7. Lägg till användare");
             Console.WriteLine("8. Ta bort användare");
-            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ");
+            Console.WriteLine("-------------------------");
+            int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ:");
             switch (selectedStartMenuAlternative)
             {
                 case 1:
@@ -465,7 +480,7 @@ namespace Event
                 {
                     Console.WriteLine($"{location.Id}. {location.City}");
                 }
-                Console.WriteLine("------------------------------------");
+                Console.WriteLine("-------------------------");
                 locationId = InputManager.InputInt("Vilken plats vill du ta bort? (välj \"0\" för att avsluta)");
                 if (locationId == 0)
                 {
@@ -508,7 +523,7 @@ namespace Event
                 {
                     Console.WriteLine($"{type.Id}. {type.Name}");
                 }
-                Console.WriteLine("------------------------------------");
+                Console.WriteLine("-----------------------");
                 typeId = InputManager.InputInt("Vilken typ vill du ta bort? (välj \"0\" för att avsluta)");
                 if (typeId == 0)
                 {

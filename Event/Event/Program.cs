@@ -408,22 +408,95 @@ namespace Event
                 case 3:
                     JoinEventMenu();
                     break;
+                case 4:
+                    CancelEventForUserMenu();
+                    break;
                 default:
                     break;
             }
         }
 
-        private static void JoinEventMenu()
+        private static void CancelEventForUserMenu()
         {
-            var newEvents = new Models.Event();
-            
-            foreach (var item in newEvents.ListAllActiveEvents())
+            var thisEvent = new Models.Event();
+            var eventsForUser = thisEvent.ShowAllEventsForUser(logedInUser.Id);
+            if (!eventsForUser.Any())
             {
-                Console.WriteLine($"{item.Id}. {item.Name}");
+                Console.WriteLine("Du är inte anmäld till några Event!");
+                Thread.Sleep(3000);
+                Console.Clear();
+                RouteUser();
             }
+            else
+            {
+                var location = new Location();
+                var repeat = true;
+                while (repeat)
+                {
+                    foreach (var item in eventsForUser)
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}");
+                }
+                var selectedEventId = int.Parse(InputManager.InputString("Ange vilket Event du avboka, tryck 0 för att avbryta!"));
+                if (selectedEventId == 0)
+                {
+                    RouteUser();
+                }
+                thisEvent = thisEvent.ShowEvent(selectedEventId);
+                location = location.GetLocation(thisEvent.LocationId);
+                DateTime startDate = thisEvent.StartDate.Value;
+                DateTime endDate = thisEvent.EndDate.Value;
+                Console.Clear();
+                Console.WriteLine(
+                    $"{thisEvent.Name}\n" +
+                    $"Eventet startar: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Eventet slutar: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Eventet är i: {location.City}"
+                    );
+                Console.WriteLine("Vill du avboka det här eventet? y/n");
+                if (Console.ReadLine() == "y")
+                    repeat = false;
+            }
+            var joinEvent = new JoinEvent();
+            joinEvent.SignOff(logedInUser, thisEvent);
+            RouteUser();
 
         }
+        }
 
+        private static void JoinEventMenu()
+        {
+            var _context = new EventContext();
+            var thisEvent = new Models.Event();
+            var location = new Location();
+            var repeat = true;
+            while (repeat)
+            {
+                foreach (var item in thisEvent.ListAllActiveEvents())
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}");
+                }
+                var selectedEventId = InputManager.InputInt("Välj Event som du vill anmäla dig till.");
+
+                thisEvent = thisEvent.ShowEvent(selectedEventId);
+                location = location.GetLocation(thisEvent.LocationId);
+                DateTime startDate = thisEvent.StartDate.Value;
+                DateTime endDate = thisEvent.EndDate.Value;
+                Console.Clear();
+                Console.WriteLine(
+                    $"{thisEvent.Name}\n" +
+                    $"Eventet startar: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Eventet slutar: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                    $"Eventet är i: {location.City}"
+                    );
+                Console.WriteLine("Vill du anmäla dig till det här eventet? y/n");
+                if (Console.ReadLine() == "y")
+                    repeat = false;
+            }
+            var joinEvent = new JoinEvent();
+            joinEvent.SignUp(logedInUser, thisEvent);
+            RouteUser();
+        }
         private static void ShowAllEventsForUserMenu()
         {
             var userEvents = new Models.Event();
@@ -437,35 +510,39 @@ namespace Event
             }
             else
             {
-                foreach (var item in eventsForUser)
+                var location = new Location();
+                var repeat = true;
+                while (repeat)
                 {
-                    Console.WriteLine($"{item.Name}");
+                    foreach (var item in eventsForUser)
+                    {
+                        Console.WriteLine($"{item.Id}. {item.Name}");
+                    }
+                    var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av, tryck 0 för att avbryta!"));
+                    if (thisEvent == 0)
+                    {
+                        RouteUser();
+                    }
+                    var returnedEvent = userEvents.ShowEvent(thisEvent);
+                    var city = location.GetLocation(returnedEvent.LocationId);
+                    DateTime startDate = returnedEvent.StartDate.Value;
+                    DateTime endDate = returnedEvent.EndDate.Value;
+                    Console.Clear();
+                    Console.WriteLine(
+                        $"{returnedEvent.Name}\n" +
+                        $"Eventet startar: {startDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                        $"Eventet slutar: {endDate.ToString("dddd, dd MMMM yyyy ")}\n" +
+                        $"Eventet är i: {city.City}"
+                        );
+                    Console.WriteLine("Vill du titta på ett event till? y/n");
+                    if (Console.ReadLine() != "y")
+                        repeat = false;
                 }
-                var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av, tryck 0 för att avbryta!"));
-                if (thisEvent == 0)
-                {
-                    RouteUser();
-                }
+                Console.Clear();
+                RouteUser();
             }
 
         }
-
-        private static void canceluser()
-        {
-            var _context = new EventContext();
-            var userId = _context.User.FirstOrDefault(c => c.Name == logedinUserName).Id;
-
-            var eventsId = _context.JoinEvent.ToList().Where(c => c.UserId == userId);
-            List<Models.Event> Events = new List<Models.Event>();
-            foreach (var item in eventsId)
-            {
-                Console.WriteLine(
-                    $"{_context.Event.FirstOrDefault(c => c.Id == item.EventId).Id}. " +
-                    $"{_context.Event.FirstOrDefault(c => c.Id == item.EventId).Name}");
-            }
-            var eventToCancelId = InputManager.InputInt("Vilket event vill du avboka?");
-        }
-
         private static void RemoveLocationMenu()
         {
             Console.Clear();

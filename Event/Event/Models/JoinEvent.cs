@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Event.Models
 {
@@ -16,16 +17,11 @@ namespace Event.Models
         public void SignUp(User user, Event chosenEvent)
         {
             var _context = new EventContext();
-            var thisUser = _context.User.Find(user.Id);
-            var thisEvent = _context.Event.Find(chosenEvent.Id);
-
             JoinEvent join = new JoinEvent
             {
-                UserId = thisUser.Id,
-                EventId = thisEvent.Id,
-                Date = DateTime.Now,
-                Event = thisEvent,
-                User = thisUser,
+            UserId = user.Id,
+            EventId = chosenEvent.Id,
+            Date = DateTime.Now,
             };
 
             _context.JoinEvent.Add(join);
@@ -35,9 +31,7 @@ namespace Event.Models
         public void SignOff(User user, Event chosenEvent)
         {
             var _context = new EventContext();
-            var thisUser = _context.User.Find(user.Id);
-            var thisEvent = _context.Event.Find(chosenEvent.Id);
-            var join = _context.JoinEvent.Find(user.Id, chosenEvent.Id);
+            var join = _context.JoinEvent.FirstOrDefault(e => e.UserId == user.Id && e.EventId == chosenEvent.Id);
 
             _context.JoinEvent.Remove(join);
             _context.SaveChanges();

@@ -100,7 +100,7 @@ namespace Event.Models
 
             foreach (var item in JoinEvents)
             {
-                EventsForUser.Add(_context.Event.FirstOrDefault(e => e.Id == item.Id));
+                EventsForUser.Add(_context.Event.FirstOrDefault(e => e.Id == item.EventId));
             }
             return EventsForUser;
         }

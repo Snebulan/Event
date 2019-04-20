@@ -406,6 +406,7 @@ namespace Event
             {
                 Console.WriteLine($"{item.Id}. {item.Name}");
             }
+
         }
 
         private static void ShowAllEventsForUserMenu()

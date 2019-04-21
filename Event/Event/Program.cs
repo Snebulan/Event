@@ -320,6 +320,7 @@ namespace Event
             Console.WriteLine("2. Visa mina Event");
             Console.WriteLine("3. Boka Event");
             Console.WriteLine("4. Boka av Event");
+            Console.WriteLine("5. Visa alla meddelanden");
             Console.WriteLine("-------------------------");
             int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ:");
             switch (selectedStartMenuAlternative)
@@ -336,8 +337,31 @@ namespace Event
                 case 4:
                     CancelEventForUserMenu();
                     break;
+                case 5:
+                    ShowAllMessagesMenu();
+                    break;
                 default:
                     break;
+            }
+        }
+
+        private static void ShowAllMessagesMenu()
+        {
+            var Chatts = new Chatt();
+            var recievedMessages = Chatts.ShowAllRecievedMessages(logedInUser.Id);
+            var sentMessages = Chatts.ShowAllSentMessages(logedInUser.Id);
+
+            Console.Clear();
+            Console.WriteLine("Mottagna Meddelanden:");
+            foreach (var item in recievedMessages)
+            {
+                Console.WriteLine(item.Message);
+            }
+            Console.WriteLine("\n");
+            Console.WriteLine("Skickade Meddelaneden:");
+            foreach (var item in sentMessages)
+            {
+                Console.WriteLine(item.Message);
             }
         }
 
@@ -532,7 +556,7 @@ namespace Event
             {
                 Console.Clear();
                 Console.WriteLine("-- Anmälan till Event ---");
-                foreach (var item in thisEvent.ListAllActiveEvents())
+                foreach (var item in thisEvent.GetEventsAvailableForUSer(logedInUser.Id))
                 {
                     Console.WriteLine($"{item.Id}. {item.Name}");
                 }

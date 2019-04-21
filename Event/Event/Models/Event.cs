@@ -133,5 +133,19 @@ namespace Event.Models
             }
             return EventsForUser;
         }
+
+        public List<Event> GetEventsAvailableForUSer(int userId)
+        {
+            var _context = new EventContext();
+            List<Models.Event> activeEvents = ListAllActiveEvents();
+            List<JoinEvent> joinEventsForUser = _context.JoinEvent.Where(j => j.UserId == userId).ToList();
+            List<Models.Event> eventsAvailableForUser = new List<Event>();
+            IEnumerable<Event> result = activeEvents.Where(a => !joinEventsForUser.Any(p1 => p1.EventId == a.Id));
+            foreach (var item in result)
+            {
+                eventsAvailableForUser.Add(item);
+            }
+            return eventsAvailableForUser;
+        }
     }
 }

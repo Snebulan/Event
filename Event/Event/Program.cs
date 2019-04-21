@@ -651,7 +651,6 @@ namespace Event
                 var repeat = true;
                 while (repeat)
                 {
-                    Console.WriteLine("-------------------------");
                     Console.WriteLine("----- Anmälda Event -----");
                     foreach (var item in eventsForUser)
                     {

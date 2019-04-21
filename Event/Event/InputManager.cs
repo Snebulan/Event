@@ -7,6 +7,11 @@ namespace Event
     class InputManager
     {
 
+        /// <summary>
+        /// Handles inputs of strings
+        /// </summary>
+        /// <param name="prompt">Input prompt</param>
+        /// <returns>input as string</returns>
         public static string InputString(string prompt)
         {
             string input = "";
@@ -20,6 +25,11 @@ namespace Event
             return input;
         }
 
+        /// <summary>
+        /// Handles inputs of bool
+        /// </summary>
+        /// <param name="prompt">Input prompt</param>
+        /// <returns>input as a bool</returns>
         public static bool InputBool(string prompt)
         {
             bool validBool = true;
@@ -44,6 +54,11 @@ namespace Event
 
         }
 
+        /// <summary>
+        /// Handles inputs of int
+        /// </summary>
+        /// <param name="prompt">Input prompt</param>
+        /// <returns>input as an int</returns>
         public static int InputInt(string prompt)
         {
             bool validInt = false;
@@ -56,6 +71,11 @@ namespace Event
             return inputInt;
         }
 
+        /// <summary>
+        /// Handles inputs of datetime
+        /// </summary>
+        /// <param name="prompt">Input prompt</param>
+        /// <returns>input as a datetime</returns>
         public static DateTime InputDate(string prompt)
         {
             bool validDateTime = false;

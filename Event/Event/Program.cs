@@ -349,6 +349,9 @@ namespace Event
             }
         }
 
+        /// <summary>
+        /// Shows message menu
+        /// </summary>
         private static void SendMessageMenu()
         {
             var _context = new EventContext();
@@ -384,6 +387,9 @@ namespace Event
 
         }
 
+        /// <summary>
+        /// Show all mesages menu
+        /// </summary>
         private static void ShowAllMessagesMenu()
         {
             var Chatts = new Chatt();

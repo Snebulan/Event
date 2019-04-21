@@ -28,5 +28,12 @@ namespace Event.Models
             List<Chatt> Chatts = _context.Chatt.Where(c => c.SenderId == userId).ToList();
             return Chatts;
         }
+
+        public void sendMessage(Chatt Message)
+        {
+            var _context = new EventContext();
+            _context.Add(Message);
+            _context.SaveChanges();
+        }
     }
 }

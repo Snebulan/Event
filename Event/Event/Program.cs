@@ -321,6 +321,7 @@ namespace Event
             Console.WriteLine("3. Boka Event");
             Console.WriteLine("4. Boka av Event");
             Console.WriteLine("5. Visa alla meddelanden");
+            Console.WriteLine("6. Skicka meddelande");
             Console.WriteLine("-------------------------");
             int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ:");
             switch (selectedStartMenuAlternative)
@@ -340,9 +341,47 @@ namespace Event
                 case 5:
                     ShowAllMessagesMenu();
                     break;
+                case 6:
+                    SendMessageMenu();
+                    break;
                 default:
                     break;
             }
+        }
+
+        private static void SendMessageMenu()
+        {
+            var _context = new EventContext();
+            var thisUser = new User();
+            var newMessage = new Chatt();
+            var users = thisUser.GetAllUsersExceptLogedInUser(logedInUser.Id);
+            bool repeat = true;
+
+            while (repeat)
+            {
+                Console.Clear();
+                Console.WriteLine("Skicka nytt meddelande!");
+                foreach (var item in users)
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}");
+                }
+
+
+                newMessage.RecieverId = InputManager.InputInt("Välj mottagare.");
+                newMessage.Message = InputManager.InputString("Skriv in ditt meddelande");
+                newMessage.SenderId = logedInUser.Id;
+                var reciever = _context.User.FirstOrDefault(u => u.Id == newMessage.RecieverId);
+                Console.WriteLine(
+                    $"Vill du skicka följande meddelande:\n" +
+                    $"Mottagare: {reciever.Name}\n" +
+                    $"Meddelande: {newMessage.Message}");
+                Console.WriteLine("Vill du skicka meddelande? y/n");
+                if (Console.ReadLine() == "y")
+                    repeat = false;
+            }
+            newMessage.sendMessage(newMessage);
+            RouteUser();
+
         }
 
         private static void ShowAllMessagesMenu()
@@ -512,35 +551,35 @@ namespace Event
                 {
                     Console.WriteLine("----- Avboka Event ------");
                     foreach (var item in eventsForUser)
-                {
-                    Console.WriteLine($"{item.Id}. {item.Name}");
-                }
+                    {
+                        Console.WriteLine($"{item.Id}. {item.Name}");
+                    }
                     Console.WriteLine("-------------------------");
                     var selectedEventId = int.Parse(InputManager.InputString("Ange vilket Event du avboka, tryck 0 för att avbryta!"));
-                if (selectedEventId == 0)
-                {
-                    RouteUser();
-                }
-                thisEvent = thisEvent.ShowEvent(selectedEventId);
-                location = location.GetLocation(thisEvent.LocationId);
+                    if (selectedEventId == 0)
+                    {
+                        RouteUser();
+                    }
+                    thisEvent = thisEvent.ShowEvent(selectedEventId);
+                    location = location.GetLocation(thisEvent.LocationId);
                     var startDate = thisEvent.StartDate.ToString("dddd, dd MMMM yyyy ");
                     var endDate = thisEvent.EndDate.ToString("dddd, dd MMMM yyyy ");
-                Console.Clear();
-                Console.WriteLine(
-                    $"{thisEvent.Name}\n" +
-                    $"Eventet startar: {startDate}\n" +
-                    $"Eventet slutar: {endDate}\n" +
-                    $"Eventet är i: {location.City}"
-                    );
+                    Console.Clear();
+                    Console.WriteLine(
+                        $"{thisEvent.Name}\n" +
+                        $"Eventet startar: {startDate}\n" +
+                        $"Eventet slutar: {endDate}\n" +
+                        $"Eventet är i: {location.City}"
+                        );
                     Console.WriteLine("-------------------------");
                     Console.WriteLine("Vill du avboka det här eventet? y/n");
-                if (Console.ReadLine() == "y")
-                    repeat = false;
+                    if (Console.ReadLine() == "y")
+                        repeat = false;
+                }
+                var joinEvent = new JoinEvent();
+                joinEvent.SignOff(logedInUser, thisEvent);
+                RouteUser();
             }
-            var joinEvent = new JoinEvent();
-            joinEvent.SignOff(logedInUser, thisEvent);
-            RouteUser();
-        }
         }
 
         /// <summary>

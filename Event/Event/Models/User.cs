@@ -70,5 +70,12 @@ namespace Event.Models
             var users = _context.User.ToList();
             return users;
         }
+
+        public List<User> GetAllUsersExceptLogedInUser(int userId)
+        {
+            var _context = new EventContext();
+            List<User> users = _context.User.Where(u => u.Id != userId && u.Role != "admin").ToList();
+            return users;
+        }
     }
 }

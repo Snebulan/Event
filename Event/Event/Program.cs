@@ -63,6 +63,12 @@ namespace Event
 
         }
 
+        private static void LogOut()
+        {
+            Console.Clear();
+            StartMenu();
+        }
+
         /// <summary>
         /// Shows all events or all active events depending of typeOfEventList
         /// </summary>
@@ -276,6 +282,7 @@ namespace Event
             Console.WriteLine("6. Ta bort Typ");
             Console.WriteLine("7. Lägg till användare");
             Console.WriteLine("8. Ta bort användare");
+            Console.WriteLine("0. Logga ut");
             Console.WriteLine("-------------------------");
             int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ:");
             switch (selectedStartMenuAlternative)
@@ -304,6 +311,9 @@ namespace Event
                 case 8:
                     RemoveUserMenu();
                     break;
+                case 0:
+                    LogOut();
+                    break;
                 default:
                     break;
             }
@@ -322,6 +332,7 @@ namespace Event
             Console.WriteLine("4. Boka av Event");
             Console.WriteLine("5. Visa alla meddelanden");
             Console.WriteLine("6. Skicka meddelande");
+            Console.WriteLine("0. Logga ut");
             Console.WriteLine("-------------------------");
             int selectedStartMenuAlternative = InputManager.InputInt("Välj meny alternativ:");
             switch (selectedStartMenuAlternative)
@@ -344,6 +355,9 @@ namespace Event
                 case 6:
                     SendMessageMenu();
                     break;
+                case 0:
+                    LogOut();
+                    break;
                 default:
                     break;
             }
@@ -363,21 +377,23 @@ namespace Event
             while (repeat)
             {
                 Console.Clear();
-                Console.WriteLine("Skicka nytt meddelande!");
+                Console.WriteLine("--- Skicka meddelande ---");
                 foreach (var item in users)
                 {
                     Console.WriteLine($"{item.Id}. {item.Name}");
                 }
-
-
-                newMessage.RecieverId = InputManager.InputInt("Välj mottagare.");
+                Console.WriteLine("-------------------------");
+                newMessage.RecieverId = InputManager.InputInt("Välj mottagare:");
+                Console.WriteLine("-------------------------");
                 newMessage.Message = InputManager.InputString("Skriv in ditt meddelande");
                 newMessage.SenderId = logedInUser.Id;
                 var reciever = _context.User.FirstOrDefault(u => u.Id == newMessage.RecieverId);
+                Console.Clear();
                 Console.WriteLine(
                     $"Vill du skicka följande meddelande:\n" +
                     $"Mottagare: {reciever.Name}\n" +
                     $"Meddelande: {newMessage.Message}");
+                Console.WriteLine("-------------------------");
                 Console.WriteLine("Vill du skicka meddelande? y/n");
                 if (Console.ReadLine() == "y")
                     repeat = false;
@@ -397,17 +413,20 @@ namespace Event
             var sentMessages = Chatts.ShowAllSentMessages(logedInUser.Id);
 
             Console.Clear();
+            Console.WriteLine("--- Visa meddelanden ----");
             Console.WriteLine("Mottagna Meddelanden:");
             foreach (var item in recievedMessages)
             {
                 Console.WriteLine(item.Message);
             }
             Console.WriteLine("\n");
-            Console.WriteLine("Skickade Meddelaneden:");
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("Skickade Meddelanden:");
             foreach (var item in sentMessages)
             {
                 Console.WriteLine(item.Message);
             }
+            Console.WriteLine("-------------------------");
             Console.WriteLine("Tryck valfri tangent för att återvända till menyn");
             Console.ReadLine();
             RouteUser();

@@ -402,6 +402,9 @@ namespace Event
             {
                 Console.WriteLine(item.Message);
             }
+            Console.WriteLine("Tryck valfri tangent för att återvända till menyn");
+            Console.ReadLine();
+            RouteUser();
         }
 
         /// <summary>

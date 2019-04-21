@@ -16,8 +16,8 @@ namespace Event
         static void Main(string[] args)
         {
             StartMenu();
-
         }
+
         /// <summary>
         /// Logs in user and sets logeInUser
         /// </summary>
@@ -53,16 +53,16 @@ namespace Event
             if (userRole == "admin")
             {
                 AdminMenu();
-
             }
             else
             {
                 UserMenu();
             }
-
-
         }
 
+        /// <summary>
+        /// Logs Out the user or admin and returns to startmenu
+        /// </summary>
         private static void LogOut()
         {
             Console.Clear();
@@ -97,7 +97,11 @@ namespace Event
                     }
                 }
                 Console.WriteLine("-------------------------");
-                var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av!"));
+                var thisEvent = int.Parse(InputManager.InputString("Ange vilket Event du vill se mer av, tryck 0 för att avbryta!"));
+                if (thisEvent == 0)
+                {
+                    RouteUser();
+                }
                 var returnedEvent = events.ShowEvent(thisEvent);
                 var city = location.GetLocation(returnedEvent.LocationId);
                 var startDate = returnedEvent.StartDate.ToString("dddd, dd MMMM yyyy ");
@@ -138,7 +142,6 @@ namespace Event
                     UserMenu();
                     break;
                 default:
-
                     break;
             }
         }
@@ -180,9 +183,7 @@ namespace Event
                 {
                     locationChosen = InputManager.InputString("Ange ortens namn: ");
                     var newLocation = location.CreateLocation(locationChosen);
-
                     var newLocationId = _context.Location.First(l => l.City == locationChosen);
-
                     city = newLocationId.Id;
                 }
                 else
@@ -204,11 +205,8 @@ namespace Event
                 {
                     typeChosen = InputManager.InputString("Ange typens namn: ");
                     var newType = type.CreateType(typeChosen);
-
                     var newTypeId = _context.Type.First(x => x.Name == typeChosen);
-
                     typeOfEvent = newTypeId.Id;
-
                 }
                 else
                 {
@@ -317,7 +315,6 @@ namespace Event
                 default:
                     break;
             }
-
         }
 
         /// <summary>
@@ -400,7 +397,6 @@ namespace Event
             }
             newMessage.sendMessage(newMessage);
             RouteUser();
-
         }
 
         /// <summary>
@@ -454,7 +450,7 @@ namespace Event
                 while (repeat)
                 {
                     Console.WriteLine("-------------------------");
-                    var userIdToRemove = InputManager.InputInt("Välj användare att ta bort, eller tryck 0 för att avbryta");
+                    var userIdToRemove = InputManager.InputInt("Välj användare att ta bort, tryck 0 för att avbryta");
 
                     if (userIdToRemove == 0)
                     {
@@ -472,6 +468,7 @@ namespace Event
                         repeat = false;
                     }
                 }
+                Console.WriteLine("-------------------------");
                 Console.WriteLine($"Är du säker på att du vill ta bort {userToRemove.Name}? y/n");
                 if (Console.ReadLine() == "y")
                     dontRemove = false;
@@ -628,7 +625,7 @@ namespace Event
                     Console.WriteLine($"{item.Id}. {item.Name}");
                 }
                 Console.WriteLine("-------------------------");
-                var selectedEventId = InputManager.InputInt("Välj Event som du vill anmäla dig till eller tryck 0 för att avbryta.");
+                var selectedEventId = InputManager.InputInt("Välj Event som du vill anmäla dig till, tryck 0 för att avbryta!");
                 if (selectedEventId == 0)
                 {
                     RouteUser();

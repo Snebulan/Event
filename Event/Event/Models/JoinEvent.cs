@@ -14,6 +14,11 @@ namespace Event.Models
         public virtual Event Event { get; set; }
         public virtual User User { get; set; }
 
+        /// <summary>
+        /// Signs up a user for an event
+        /// </summary>
+        /// <param name="user">User to sign up</param>
+        /// <param name="chosenEvent">Event to sign up on</param>
         public void SignUp(User user, Event chosenEvent)
         {
             var _context = new EventContext();
@@ -28,6 +33,11 @@ namespace Event.Models
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Cancels a sign up for a user on an event
+        /// </summary>
+        /// <param name="user">User to cancel sign up</param>
+        /// <param name="chosenEvent">Event to cancel sign up</param>
         public void SignOff(User user, Event chosenEvent)
         {
             var _context = new EventContext();

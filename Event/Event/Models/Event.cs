@@ -134,6 +134,11 @@ namespace Event.Models
             return EventsForUser;
         }
 
+        /// <summary>
+        /// Get events available to user
+        /// </summary>
+        /// <param name="userId">Which user to check available events for</param>
+        /// <returns>List of events for user</returns>
         public List<Event> GetEventsAvailableForUSer(int userId)
         {
             var _context = new EventContext();

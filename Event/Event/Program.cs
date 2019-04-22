@@ -66,6 +66,8 @@ namespace Event
         private static void LogOut()
         {
             Console.Clear();
+            logedIn = false;
+            logedinUserName = "";
             StartMenu();
         }
 

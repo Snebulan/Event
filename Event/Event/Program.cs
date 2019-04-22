@@ -404,23 +404,27 @@ namespace Event
         /// </summary>
         private static void ShowAllMessagesMenu()
         {
+            var _context = new EventContext();
             var Chatts = new Chatt();
             var recievedMessages = Chatts.ShowAllRecievedMessages(logedInUser.Id);
             var sentMessages = Chatts.ShowAllSentMessages(logedInUser.Id);
+
 
             Console.Clear();
             Console.WriteLine("--- Visa meddelanden ----");
             Console.WriteLine("Mottagna Meddelanden:");
             foreach (var item in recievedMessages)
             {
-                Console.WriteLine(item.Message);
+                var sender = _context.User.FirstOrDefault(u => u.Id == item.SenderId);
+                Console.WriteLine($"{sender.Name}: {item.Message}");
             }
             Console.WriteLine("\n");
             Console.WriteLine("-------------------------");
             Console.WriteLine("Skickade Meddelanden:");
             foreach (var item in sentMessages)
             {
-                Console.WriteLine(item.Message);
+                var reciever = _context.User.FirstOrDefault(u => u.Id == item.RecieverId);
+                Console.WriteLine($"{reciever.Name}: {item.Message}");
             }
             Console.WriteLine("-------------------------");
             Console.WriteLine("Tryck valfri tangent för att återvända till menyn");

@@ -384,6 +384,7 @@ namespace Event
                 Console.WriteLine("-------------------------");
                 newMessage.Message = InputManager.InputString("Skriv in ditt meddelande");
                 newMessage.SenderId = logedInUser.Id;
+                newMessage.Date = DateTime.Now;
                 var reciever = _context.User.FirstOrDefault(u => u.Id == newMessage.RecieverId);
                 Console.Clear();
                 Console.WriteLine(
@@ -415,16 +416,21 @@ namespace Event
             Console.WriteLine("Mottagna Meddelanden:");
             foreach (var item in recievedMessages)
             {
+
+                Console.WriteLine($"{item.Date.Value.ToString("dddd, dd MMMM yyyy")}");
                 var sender = _context.User.FirstOrDefault(u => u.Id == item.SenderId);
                 Console.WriteLine($"{sender.Name}: {item.Message}");
+                Console.WriteLine("-");
             }
             Console.WriteLine("\n");
             Console.WriteLine("-------------------------");
             Console.WriteLine("Skickade Meddelanden:");
             foreach (var item in sentMessages)
             {
+                Console.WriteLine($"{item.Date.Value.ToString("dddd, dd MMMM yyyy")}");
                 var reciever = _context.User.FirstOrDefault(u => u.Id == item.RecieverId);
                 Console.WriteLine($"{reciever.Name}: {item.Message}");
+                Console.WriteLine("-");
             }
             Console.WriteLine("-------------------------");
             Console.WriteLine("Tryck valfri tangent för att återvända till menyn");

@@ -16,6 +16,11 @@ namespace Event.Models
 
         public virtual ICollection<Event> Event { get; set; }
 
+        /// <summary>
+        /// Creates a new location
+        /// </summary>
+        /// <param name="name">The name of the location</param>
+        /// <returns>Returnes a bool if the location is created or not</returns>
         public bool CreateLocation(string name)
         {
             var LocationCreated = false;
@@ -39,6 +44,11 @@ namespace Event.Models
             return LocationCreated;
         }
 
+        /// <summary>
+        /// Removes a location
+        /// </summary>
+        /// <param name="name">The name of the location</param>
+        /// <returns>Returnes a bool if the location is removed or not</returns>
         public bool RemoveLocation(int id)
         {
             var LocationDeleted = false;
@@ -57,6 +67,10 @@ namespace Event.Models
             return LocationDeleted;
         }
 
+        /// <summary>
+        /// Creates a list of locations
+        /// </summary>
+        /// <returns>A list of locations</returns>
         public List<Location> ListAllLocations()
         {
             var _context = new EventContext();
@@ -64,6 +78,11 @@ namespace Event.Models
             return locations;
         }
 
+        /// <summary>
+        /// Returns a location based on id
+        /// </summary>
+        /// <param name="Id">The id of the location</param>
+        /// <returns>A location based on id</returns>
         public Location GetLocation(int Id)
         {
             var _context = new EventContext();

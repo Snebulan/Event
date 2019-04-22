@@ -16,6 +16,11 @@ namespace Event.Models
 
         public virtual ICollection<Event> Event { get; set; }
 
+        /// <summary>
+        /// Creates a new type
+        /// </summary>
+        /// <param name="name">The name of the type</param>
+        /// <returns>Returns a bool if the type is created or not </returns>
         public bool CreateType(string name)
         {
             var typeCreated = false;
@@ -39,6 +44,11 @@ namespace Event.Models
             return typeCreated;
         }
 
+        /// <summary>
+        /// Removes a type
+        /// </summary>
+        /// <param name="name">The name of the type</param>
+        /// <returns>Returns a bool if the type is removed or not </returns>
         public bool RemoveType(int id)
         {
             var typeDeleted = false;
@@ -57,6 +67,10 @@ namespace Event.Models
             return typeDeleted;
         }
 
+        /// <summary>
+        /// Creates a list of types
+        /// </summary>
+        /// <returns>A list of types</returns>
         public List<Type> ListAllTypes()
         {
             var _context = new EventContext();

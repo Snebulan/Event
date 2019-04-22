@@ -25,7 +25,11 @@ namespace Event.Models
         public virtual ICollection<EventChatMessage> EventChatMessage { get; set; }
         public virtual ICollection<JoinEvent> JoinEvent { get; set; }
 
-
+        /// <summary>
+        /// Creates a new user
+        /// </summary>
+        /// <param name="newUser">User user</param>
+        /// <returns>bool created</returns>
         public bool CreateUser(User newUser)
         {
             var userCreated = false;
@@ -46,6 +50,11 @@ namespace Event.Models
             return userCreated;
         }
 
+        /// <summary>
+        /// removes a user
+        /// </summary>
+        /// <param name="id">Id of user to be removed</param>
+        /// <returns>bool userDeleted</returns>
         public bool RemoveUser(int id)
         {
             var userDeleted = false;
@@ -64,6 +73,10 @@ namespace Event.Models
             return userDeleted;
         }
 
+        /// <summary>
+        /// Gets a list of all users
+        /// </summary>
+        /// <returns>List <User></User></returns>
         public List<User> GetAllUsers()
         {
             var _context = new EventContext();
@@ -71,6 +84,11 @@ namespace Event.Models
             return users;
         }
 
+        /// <summary>
+        /// Gets al users except the one thats loggedin
+        /// </summary>
+        /// <param name="userId">id og loggedInUser</param>
+        /// <returns>List<user></user></returns>
         public List<User> GetAllUsersExceptLogedInUser(int userId)
         {
             var _context = new EventContext();
